@@ -69,7 +69,7 @@ public class JFrameTelaInicial extends javax.swing.JFrame {
         jButtonZoomIn = new javax.swing.JButton();
         jButtonZoomOut = new javax.swing.JButton();
         jScrollPaneTexto = new javax.swing.JScrollPane();
-        jTextPane1 = new javax.swing.JTextPane();
+        jTextPaneTexto = new javax.swing.JTextPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -155,7 +155,7 @@ public class JFrameTelaInicial extends javax.swing.JFrame {
             }
         });
 
-        jScrollPaneTexto.setViewportView(jTextPane1);
+        jScrollPaneTexto.setViewportView(jTextPaneTexto);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -209,13 +209,13 @@ public class JFrameTelaInicial extends javax.swing.JFrame {
                     .addComponent(jLabelNomeArquivo, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(30, 30, 30)
-                        .addComponent(jScrollPaneTexto, javax.swing.GroupLayout.PREFERRED_SIZE, 421, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(Canvas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())))
+                        .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(30, 30, 30)
+                        .addComponent(jScrollPaneTexto, javax.swing.GroupLayout.PREFERRED_SIZE, 812, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
         pack();
@@ -250,8 +250,8 @@ public class JFrameTelaInicial extends javax.swing.JFrame {
             pdfDocument = PDDocument.load(file.getSelectedFile());
             PDFTextStripper stripper = new PDFTextStripper();
             texto = stripper.getText(pdfDocument);
-            System.out.println(texto);
-            jScrollPaneTexto.add(texto,null);
+            //System.out.println(texto);
+            jTextPaneTexto.setText(texto);
         } catch (IOException e) {
             throw new RuntimeException(e);
         } finally {
@@ -267,8 +267,6 @@ public class JFrameTelaInicial extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonAnalisarActionPerformed
 
     private void jButtonAntActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAntActionPerformed
-        String temp = file.getSelectedFile().getName();
-        System.out.println(temp + ".");
         if (file.getSelectedFile().getName().length() != 0) {
             //if para que comprueba si la pagina es 1 entonces se ira a la ultima pagina
             this.numImg -= 1;
@@ -459,6 +457,6 @@ public class JFrameTelaInicial extends javax.swing.JFrame {
     private javax.swing.JLabel jLabelPag;
     private javax.swing.JScrollPane jScrollPaneTexto;
     private javax.swing.JTextField jTextFieldSelecionarPasta;
-    private javax.swing.JTextPane jTextPane1;
+    private javax.swing.JTextPane jTextPaneTexto;
     // End of variables declaration//GEN-END:variables
 }
