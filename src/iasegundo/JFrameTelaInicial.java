@@ -5,25 +5,24 @@
  */
 package iasegundo;
 
-import chrriis.dj.nativeswing.swtimpl.components.JWebBrowser;
-import java.awt.BorderLayout;
-import java.awt.Desktop;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Vector;
-import javafx.stage.FileChooser;
 import javax.swing.JFileChooser;
-import javafx.stage.Stage;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import org.apache.pdfbox.pdmodel.*;
 import LeitorPDF.MiVisorPDF;
 import LeitorPDF.ArchivosVO;
-import LeitorPDF.CuadroImagen;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.util.Arrays;
+import opennlp.tools.tokenize.SimpleTokenizer;
 import org.apache.pdfbox.text.PDFTextStripper;
+import opennlp.tools.tokenize.Tokenizer;
+import opennlp.tools.tokenize.TokenizerME;
+import opennlp.tools.tokenize.TokenizerModel;
+import opennlp.tools.tokenize.WhitespaceTokenizer;
 
 /**
  *
@@ -45,6 +44,7 @@ public class JFrameTelaInicial extends javax.swing.JFrame {
 
     public JFrameTelaInicial() {
         initComponents();
+        
 
     }
 
@@ -222,7 +222,6 @@ public class JFrameTelaInicial extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonSelecionarPastaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSelecionarPastaActionPerformed
-        //JFileChooser file = new JFileChooser(diretorio_arquivo);
         file.setFileFilter(new FileNameExtensionFilter("Arquivos *.pdf", "pdf"));;
         file.setDialogTitle("Selecione o arquivo fonte");
         arquivo_selecionado = file.showOpenDialog(null);
@@ -236,8 +235,9 @@ public class JFrameTelaInicial extends javax.swing.JFrame {
                 File arquivo = file.getSelectedFile();
                 jTextFieldSelecionarPasta.setText(file.getSelectedFile().getPath());
                 jLabelNomeArquivo.setText(file.getSelectedFile().getName());
-                abrir_pdf(arquivo.getPath());
+                //abrir_pdf(arquivo.getPath());
                 this.Canvas.disminuir();
+
             }
         }
 
@@ -246,12 +246,13 @@ public class JFrameTelaInicial extends javax.swing.JFrame {
 
     private void jButtonAnalisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAnalisarActionPerformed
         PDDocument pdfDocument = null;
+        String[] cabecalho;
         try {
             pdfDocument = PDDocument.load(file.getSelectedFile());
             PDFTextStripper stripper = new PDFTextStripper();
             texto = stripper.getText(pdfDocument);
-            //System.out.println(texto);
-            jTextPaneTexto.setText(texto);
+            analisar_texto();
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         } finally {
@@ -298,7 +299,7 @@ public class JFrameTelaInicial extends javax.swing.JFrame {
 
     private void jButtonProxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonProxActionPerformed
         if (file.getSelectedFile().getName().length() != 0) {
-                        this.numImg += 1;
+            this.numImg += 1;
             if (paginas == totalp) {
                 paginas = 1;
                 jLabelPag.setText(String.valueOf("Pág. " + paginas));
@@ -442,6 +443,27 @@ public class JFrameTelaInicial extends javax.swing.JFrame {
             }
         }
 
+    }
+
+    public void analisar_texto() {
+        String[] cabecalho = texto.split("\\r\\n");
+        jTextPaneTexto.setText(texto);
+        texto = texto.replace(cabecalho[0], "");  //Remove o cabeçalho da pagina
+        System.out.println(texto);
+        //conta_palavra();
+
+    }
+
+    public void conta_palavra() {
+
+        Tokenizer tokenizer = SimpleTokenizer.INSTANCE;
+        String tokens[] = tokenizer.tokenize(texto);
+ 
+        System.out.println("Token\n----------------");
+        for(int i=0;i<tokens.length;i++){
+            System.out.println(tokens[i]);
+        }
+    
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
