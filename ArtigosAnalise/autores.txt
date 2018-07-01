@@ -1,0 +1,120 @@
+﻿2194 IEEE TRANSACTIONS ON CONTROL SYSTEMS TECHNOLOGY, VOL. 25, NO. <START:data>6, NOVEMBER 2017<END>
+<START:tema>Feedback Controllers as Financial Advisors for Low-Income Individuals<END>
+<START:person> Hugo Gonzalez Villasanti <END> and <START:person> Kevin M. Passino <END>, Fellow, IEEE
+Abstract— Feedback controllers are introduced to help manage
+an individual’s or household’s financial life and build savings. The
+controllers can be viewed as financial advisors for an individual’s
+resource allocation problem, which is modeled as a nonlinear
+discrete time stochastic system with income uncertainties, asset
+losses, and constraints on cash flow and credit. We introduce a
+model predictive controller (MPC) and a proportional-integral-
+derivative (PID) controller, and compare them with a benchmark
+method employed in finance and economics, stochastic dynamic
+programming (DP). Both MPC and PID produce similar consis-
+tency in financial management compared with DP. They also
+offer the advantage of low computational complexity relative
+to DP, which allows us to efficiently perform assessments of
+robustness (reliability) and disturbance rejection (e.g., effects of
+uncertainties), both of which are of significant practical engineer-
+ing importance. In addition, this flexibility enables us to uncover
+the system’s properties, such as the existence of a “poverty
+trap" caused by constraints in the control space and dynamics.
+The effectiveness of a PID-based aid intervention for low-skilled
+and low-endowed agents that lie within the trap is assessed
+and contrasted with other existing cash transfer programs, with
+results that support a further implementation analysis. These
+assessments constitute a novel application of feedback controllers
+that, besides effectively dealing with scarcity constraints, present
+practical advantages that are shown to translate into an ability
+to implement the MPC or PID controller in a variety of ways
+for low-income individuals via computer-assistive methods (e.g.,
+a cell phone).
+Index Terms— Feedback control, model predictive
+control (MPC), poverty trap, proportional-integral-
+derivative (PID) control, reliability, safety net.
+<START:tema>Estimating Tipping Points in Feedback-Driven
+Financial Networks<END>
+<START:person> Zvonko Kostanjčar <END>, Member, IEEE,<START:person> Stjepan Begušić <END>,<START:person> Harry Eugene Stanley <END>, and<START:person> Boris Podobnik <END>
+Abstract—Much research has been conducted arguing that tip-
+ping points at which complex systems experience phase transitions
+are difficult to identify. To test the existence of tipping points in
+financial markets, based on the alternating offer strategic model
+we propose a network of bargaining agents who mutually either co-
+operate or compete, where the feedback mechanism between trad-
+ing and price dynamics is driven by an external “hidden” variable
+R that quantifies the degree of market overpricing. Due to the feed-
+back mechanism, R fluctuates and oscillates over time, and thus
+periods when the market is underpriced and overpriced occur re-
+peatedly. As the market becomes overpriced, bubbles are created
+that ultimately burst as the market reaches a crash tipping point
+Rc . The market starts recovering from the crash as a recovery tip-
+ping point Rr is reached. The probability that the index will drop
+in the next year exhibits a strong hysteresis behavior very much
+alike critical transitions in other complex systems. The probability
+distribution function of R has a bimodal shape characteristic of
+small systems near the tipping point. By examining the S&P500
+index we illustrate the applicability of the model and demonstrate
+that the financial data exhibit tipping points that agree with the
+model. We report a cointegration between the returns of the S&P
+500 index and its intrinsic value.
+Index Terms—Complex systems, cooperative game theory,
+feedback, networks, market crash, tipping point.
+1112 IEEE JOURNAL OF SELECTED TOPICS IN SIGNAL PROCESSING, VOL. 10, NO. 6, SEPTEMBER 2016
+<START:tema>Financial Stress Through Complexity Science<END>
+<START:person> Apit Hemakom <END>,<START:person> Student Member <END>, IEEE,<START:person> Theerasak Chanwimalueang <END>, Student Member, IEEE,<START:person> Alicia Carrión <END>,
+<START:person> Lisa Aufegger <END>,<START:person> Anthony G. Constantinides <END>, Life Fellow, IEEE, and<START:person> Danilo P. Mandic <END>, Fellow, IEEE
+Abstract—Financial markets typically undergo periods of pros-
+perity followed by periods of stagnation, and this undulation makes
+it challenging to maintain market efficiency. The efficient market
+hypothesis (EMH) states that there exist differences in structural
+complexity in security prices between regular and abnormal sit-
+uations. Yet, despite a clear link between market acceleration (cf.
+recession in security prices) and stress in physical systems, indices
+of financial stress still have significant scope for further develop-
+ment. The overarching aim of this work is therefore to determine
+the characteristics of financial indices related to financial stress,
+and to establish a robust metric for the extent of such ‘stress’. This
+is achieved based on intrinsic multiscale analysis which quanti-
+fies the so called complexity-loss hypothesis in the context of fi-
+nancial stress. The multiscale sample entropy and our proposed
+Assessment of Latent Index of Stress methods have successfully
+assessed financial stress, and have served as a measure to establish
+an analogy between transitions from ‘normal’ (relaxed) to ‘abnor-
+mal’ (stressed) financial periods with the sympatho-vagal balance
+in humans. Four major stock indices of the US economy over the
+past 25 years are considered: (i) Dow Jones Industrial Average, (ii)
+NASDAQ Composite, (iii) Standard & Poor’s 500, and (iv) Rus-
+sell 2000, together with FTSE 100, CAC 40 and exchange rates.
+Our findings support the EMH theory and reveal high stress for
+both the periods of Internet bubble burst and sub-prime mortgage
+crisis.
+Index Terms—Assessment of Latent Index of Stress (ALIS)
+index, complexity-loss hypothesis, determinism, financial stress,
+intrinsic phase synchrony (IPS), multiscale entroypy, nonlinearity.
+IEEE TRANSACTIONS ON FUZZY SYSTEMS, VOL. 25, NO. 2, APRIL 2017 315
+<START:tema>FN-TOPSIS: Fuzzy Networks for Ranking
+Traded Equities<END>
+<START:person> Abdul Malek Yaakob <END>,<START:person> Antoaneta Serguieva <END>,<START:person> Senior Member <END>, IEEE, and<START:person> Alexander Gegov <END>, Member, IEEE
+Abstract—Fuzzy systems consisting of networked rule bases,
+called fuzzy networks, capture various types of imprecision inher-
+ent in financial data and in the decision-making processes on them.
+This paper introduces a novel extension of the technique for order-
+ing of preference by similarity to ideal solution (TOPSIS) method
+and uses fuzzy networks to solve multicriteria decision-making
+problems where both benefit and cost criteria are presented as
+subsystems. Thus, the decision maker evaluates the performance
+of each alternative for portfolio optimization and further observes
+the performance for both benefit and cost criteria. This approach
+improves significantly the transparency of the TOPSIS methods,
+while ensuring high effectiveness in comparison with established
+approaches. The proposed method is further tested to solve the
+problem of selection/ranking of traded equity covering developed
+and emergent financial markets. The ranking produced by the
+method is validated using Spearman rho rank correlation. Based
+on the case study, the proposed method outperforms the existing
+TOPSIS approaches in terms of ranking performance.
+Index Terms—Fuzzy networks (FNs), multicriteria decision
+making (MCDM), portfolio selection, ranking performance, Spear-
+man rho correlation, technique for ordering of preference by simi-
+larity to ideal solution, type 1 fuzzy numbers, type 2 fuzzy numbers,
+Z-numbers.

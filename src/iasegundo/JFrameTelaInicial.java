@@ -15,14 +15,32 @@ import org.apache.pdfbox.pdmodel.*;
 import LeitorPDF.MiVisorPDF;
 import LeitorPDF.ArchivosVO;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import static opennlp.bratann.NameFinderAnnService.sentenceDetector;
+import opennlp.tools.namefind.BioCodec;
+import opennlp.tools.namefind.NameFinderME;
+import opennlp.tools.namefind.NameSampleDataStream;
+import opennlp.tools.namefind.TokenNameFinder;
+import opennlp.tools.namefind.TokenNameFinderFactory;
+import opennlp.tools.namefind.TokenNameFinderModel;
 import opennlp.tools.tokenize.SimpleTokenizer;
 import org.apache.pdfbox.text.PDFTextStripper;
 import opennlp.tools.tokenize.Tokenizer;
 import opennlp.tools.tokenize.TokenizerME;
 import opennlp.tools.tokenize.TokenizerModel;
 import opennlp.tools.tokenize.WhitespaceTokenizer;
+import opennlp.tools.util.InputStreamFactory;
+import opennlp.tools.util.MarkableFileInputStreamFactory;
+import opennlp.tools.util.ObjectStream;
+import opennlp.tools.util.PlainTextByLineStream;
+import opennlp.tools.util.Span;
+import opennlp.tools.util.TrainingParameters;
 
 /**
  *
@@ -31,7 +49,7 @@ import opennlp.tools.tokenize.WhitespaceTokenizer;
 public class JFrameTelaInicial extends javax.swing.JFrame {
 
     private String diretorio_arquivo = "";
-    private String texto = "";
+    public String texto = "";
     private int numImg;
     private ArrayList<ArchivosVO> ListaComponente;
     MiVisorPDF pn = new MiVisorPDF();
@@ -44,7 +62,6 @@ public class JFrameTelaInicial extends javax.swing.JFrame {
 
     public JFrameTelaInicial() {
         initComponents();
-        
 
     }
 
@@ -235,7 +252,7 @@ public class JFrameTelaInicial extends javax.swing.JFrame {
                 File arquivo = file.getSelectedFile();
                 jTextFieldSelecionarPasta.setText(file.getSelectedFile().getPath());
                 jLabelNomeArquivo.setText(file.getSelectedFile().getName());
-                //abrir_pdf(arquivo.getPath());
+                abrir_pdf(arquivo.getPath());
                 this.Canvas.disminuir();
 
             }
@@ -269,7 +286,6 @@ public class JFrameTelaInicial extends javax.swing.JFrame {
 
     private void jButtonAntActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAntActionPerformed
         if (file.getSelectedFile().getName().length() != 0) {
-            //if para que comprueba si la pagina es 1 entonces se ira a la ultima pagina
             this.numImg -= 1;
             if (paginas == 1) {
                 paginas = totalp;
@@ -287,9 +303,7 @@ public class JFrameTelaInicial extends javax.swing.JFrame {
                 pi = ListaComponente.get(numImg);
                 break;
             }
-            //Con este metodo mostramos la imagen
             this.Canvas.setImagen(pi.getArchivos());
-            //Este metodo adapta el zoom a la pantalla
             adaptar_vista();
 
         } else {
@@ -307,7 +321,6 @@ public class JFrameTelaInicial extends javax.swing.JFrame {
                 paginas = paginas + 1;
                 jLabelPag.setText(String.valueOf("Pág. " + paginas));
             }
-            //Aplica los cambios de la pagina que corresponde
             if (this.numImg >= this.ListaComponente.size()) {
                 this.numImg = 0;
             }
@@ -333,7 +346,6 @@ public class JFrameTelaInicial extends javax.swing.JFrame {
 
     private void jButtonZoomOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonZoomOutActionPerformed
         if (file.getSelectedFile().getName().length() != 0) {
-            //Disminuir el zoom
             this.Canvas.disminuir();
             zoom = zoom - 1;
 
@@ -405,30 +417,21 @@ public class JFrameTelaInicial extends javax.swing.JFrame {
 //        }
 //    }
     public void abrir_pdf(String url) {
-        //Es considerado pagina 1
         this.numImg = 0;
-        //Lee la pagina 1
         this.ListaComponente = pn.leerPDF(url);
-        //Guardamos todas las paginas en el ArrayList
         for (int i = 0; i < ListaComponente.size(); i++) {
             pl = ListaComponente.get(i);;
             this.Canvas.setImagen(pl.getArchivos());
         }
-        //Pagina 1 lo muestra en la pantalla
         paginas = 1;
         jLabelPag.setText(String.valueOf("Pág. " + paginas));
         totalp = ListaComponente.size();
-        //Titulo del pdf
-        this.setTitle("Visor PDFJava; Total Paginas: " + String.valueOf(totalp));
-        //tjLabelPag.setText(String.valueOf(totalp));
-        //Mostramos la primera pagina
         ArchivosVO pi = new ArchivosVO();
         pi = ListaComponente.get(0);
         this.Canvas.setImagen(pi.getArchivos());
     }
 
     public void adaptar_vista() {
-        //System.out.print(zoom);
         if (zoom > 0) {
             for (int i = 0; i <= zoom; i++) {
                 this.Canvas.aumentar();
@@ -449,8 +452,8 @@ public class JFrameTelaInicial extends javax.swing.JFrame {
         String[] cabecalho = texto.split("\\r\\n");
         jTextPaneTexto.setText(texto);
         texto = texto.replace(cabecalho[0], "");  //Remove o cabeçalho da pagina
-        System.out.println(texto);
         //conta_palavra();
+        encontra_autor();
 
     }
 
@@ -458,14 +461,115 @@ public class JFrameTelaInicial extends javax.swing.JFrame {
 
         Tokenizer tokenizer = SimpleTokenizer.INSTANCE;
         String tokens[] = tokenizer.tokenize(texto);
- 
+
         System.out.println("Token\n----------------");
-        for(int i=0;i<tokens.length;i++){
+        for (int i = 0; i < tokens.length; i++) {
             System.out.println(tokens[i]);
         }
-    
+
     }
 
+    public void encontra_autor() {
+        InputStreamFactory in = null;
+        try {
+            in = new MarkableFileInputStreamFactory(new File("D:\\Users\\ander\\Documentos\\NetBeansProjects\\iaSegundo\\ArtigosAnalise\\autores.txt"));
+        } catch (FileNotFoundException e2) {
+            e2.printStackTrace();
+        }
+
+        ObjectStream sampleStream = null;
+        try {
+            sampleStream = new NameSampleDataStream(
+                    new PlainTextByLineStream(in, StandardCharsets.UTF_8));
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+
+        TrainingParameters params = new TrainingParameters();
+        params.put(TrainingParameters.ITERATIONS_PARAM, 70);
+        params.put(TrainingParameters.CUTOFF_PARAM, 1);
+
+        TokenNameFinderModel nameFinderModel = null;
+        try {
+            nameFinderModel = NameFinderME.train("en", null, sampleStream,
+                    params, TokenNameFinderFactory.create(null, null, Collections.emptyMap(), new BioCodec()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // saving the model to "ner-custom-model.bin" file
+        try {
+            File output = new File("D:\\Users\\ander\\Documentos\\NetBeansProjects\\iaSegundo\\ArtigosAnalise\\autores.bin");
+            FileOutputStream outputStream = new FileOutputStream(output);
+            nameFinderModel.serialize(outputStream);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        TokenNameFinder nameFinder = new NameFinderME(nameFinderModel);
+
+        Tokenizer tokenizer = SimpleTokenizer.INSTANCE;
+        String[] testSentence = tokenizer.tokenize(texto);
+
+        System.out.println("Finding types in the test sentence..");
+        Span names[] = nameFinder.find(testSentence);
+        for (Span name : names) {
+            String personName = "";
+            for (int i = name.getStart(); i < name.getEnd(); i++) {
+                personName += testSentence[i] + " ";
+            }
+            System.out.println(name.getType() + " : " + personName + "\t [probability=" + name.getProb() + "]");
+        }
+
+//        String sentences[] = sentenceDetector.sentDetect(texto);;
+//        for (String sentence : sentences) {
+//            String tokens[] = tokenizer.tokenize(texto);
+//            Span nameSpans[] = nameFinder.find(tokens);
+//            // do something with the names
+//            System.out.println("Found entity: " + Arrays.toString(Span.spansToStrings(nameSpans, tokens)));
+//        }
+
+
+        System.out.println("Fim da busca");
+        try {
+            System.out.println("-------Finding entities belonging to category : place name------");
+            new JFrameTelaInicial().localizarTitulo();
+            System.out.println();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void localizarTitulo() throws IOException {
+        InputStream is = new FileInputStream("D:\\Users\\ander\\Documentos\\NetBeansProjects\\iaSegundo\\ArtigosAnalise\\autores.bin");
+
+        // load the model from file
+        TokenNameFinderModel model = new TokenNameFinderModel(is);
+        is.close();
+
+        // feed the model to name finder class
+        NameFinderME nameFinder = new NameFinderME(model);
+
+        // input string array
+        Tokenizer tokenizer = SimpleTokenizer.INSTANCE;
+        String[] sentence = tokenizer.tokenize(texto);
+
+        Span nameSpans[] = nameFinder.find(sentence);
+
+        // nameSpans contain all the possible entities detected
+        for (Span s : nameSpans) {
+            System.out.print(s.toString());
+            System.out.print("  :  ");
+            s.getStart();
+            s.getEnd();
+            for (int index = s.getStart(); index < s.getEnd(); index++) {
+                System.out.print(sentence[index] + " ");
+            }
+            System.out.println();
+        }
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private LeitorPDF.CuadroImagen Canvas;
     private javax.swing.JButton jButtonAnalisar;

@@ -1,0 +1,31 @@
+﻿2194 IEEE TRANSACTIONS ON CONTROL SYSTEMS TECHNOLOGY, VOL. 25, NO. <START:data>6, NOVEMBER 2017<END>
+<START:tema>Feedback Controllers as Financial Advisors for Low-Income Individuals<END>
+<START:autor> Hugo Gonzalez Villasanti <END> and<START:autor> Kevin M. Passino <END>, Fellow, IEEE
+Abstract—Feedback controllers are introduced to help manage
+an individual’s or household’s financial life and build savings. The
+controllers can be viewed as financial advisors for an individual’s
+resource allocation problem, which is modeled as a nonlinear
+discrete time stochastic system with income uncertainties, asset
+losses, and constraints on cash flow and credit. We introduce a
+model predictive controller (MPC) and a proportional-integralderivative
+(PID) controller, and compare them with a benchmark
+method employed in finance and economics, stochastic dynamic
+programming (DP). Both MPC and PID produce similar consistency
+in financial management compared with DP. They also
+offer the advantage of low computational complexity relative
+to DP, which allows us to efficiently perform assessments of
+robustness (reliability) and disturbance rejection (e.g., effects of
+uncertainties), both of which are of significant practical engineering
+importance. In addition, this flexibility enables us to uncover
+the system’s properties, such as the existence of a “poverty
+trap" caused by constraints in the control space and dynamics.
+The effectiveness of a PID-based aid intervention for low-skilled
+and low-endowed agents that lie within the trap is assessed
+and contrasted with other existing cash transfer programs, with
+results that support a further implementation analysis. These
+assessments constitute a novel application of feedback controllers
+that, besides effectively dealing with scarcity constraints, present
+practical advantages that are shown to translate into an ability
+to implement the MPC or PID controller in a variety of ways
+for low-income individuals via computer-assistive methods (e.g.,
+a cell phone).
